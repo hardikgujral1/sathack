@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tech Bench - Smart Urban Infrastructure</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #0a4d3c 0%, #1a5f5f 50%, #0d3d56 100%);
+      color: #fff;
+      line-height: 1.6;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Animated background particles */
+    .particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: rgba(76, 175, 80, 0.4);
+      border-radius: 50%;
+      animation: float 15s infinite ease-in-out;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) translateX(0); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { transform: translateY(-100vh) translateX(100px); opacity: 0; }
+    }
+
+    .content-wrapper {
+      position: relative;
+      z-index: 1;
+    }
+
+    header {
+      background: linear-gradient(135deg, rgba(10, 77, 60, 0.95) 0%, rgba(13, 61, 86, 0.95) 100%);
+      backdrop-filter: blur(10px);
+      padding: 60px 20px;
+      text-align: center;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      border-bottom: 3px solid #4caf50;
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(76, 175, 80, 0.1) 0%, transparent 70%);
+      animation: pulse 4s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 0.5; }
+      50% { transform: scale(1.1); opacity: 0.8; }
+    }
+
+    header h1 {
+      font-size: 3.5em;
+      font-weight: 700;
+      margin-bottom: 10px;
+      background: linear-gradient(135deg, #4caf50 0%, #81c784 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: glow 3s ease-in-out infinite alternate;
+      position: relative;
+      z-index: 1;
+    }
+
+    @keyframes glow {
+      from { filter: drop-shadow(0 0 10px rgba(76, 175, 80, 0.3)); }
+      to { filter: drop-shadow(0 0 25px rgba(76, 175, 80, 0.8)); }
+    }
+
+    header h3 {
+      font-size: 1.4em;
+      font-weight: 400;
+      color: #a5d6a7;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      position: relative;
+      z-index: 1;
+    }
+
+    .stats-bar {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin: 30px auto;
+      max-width: 800px;
+      flex-wrap: wrap;
+    }
+
+    .stat-item {
+      text-align: center;
+      padding: 15px 25px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      border: 1px solid rgba(76, 175, 80, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .stat-item:hover {
+      transform: translateY(-5px);
+      background: rgba(76, 175, 80, 0.2);
+      border-color: rgba(76, 175, 80, 0.6);
+    }
+
+    .stat-number {
+      font-size: 2em;
+      font-weight: 700;
+      color: #4caf50;
+      display: block;
+    }
+
+    .stat-label {
+      font-size: 0.9em;
+      color: #a5d6a7;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .section {
+      max-width: 1200px;
+      margin: 60px auto;
+      padding: 0 20px;
+    }
+
+    h2 {
+      text-align: center;
+      font-size: 2.5em;
+      margin-bottom: 20px;
+      font-weight: 600;
+      position: relative;
+      display: inline-block;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    h2::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 4px;
+      background: linear-gradient(90deg, #4caf50, #81c784);
+      border-radius: 2px;
+    }
+
+    .description {
+      text-align: center;
+      max-width: 800px;
+      margin: 30px auto;
+      font-size: 1.15em;
+      line-height: 1.8;
+      color: #c8e6c9;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 25px 30px;
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(76, 175, 80, 0.2);
+    }
+
+    .service-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+      margin-top: 50px;
+    }
+
+    .service-card {
+      background: linear-gradient(135deg, rgba(76, 175, 80, 0.15) 0%, rgba(0, 150, 136, 0.15) 100%);
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(76, 175, 80, 0.3);
+      border-radius: 25px;
+      padding: 40px 30px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(76, 175, 80, 0.2) 0%, transparent 70%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .service-card:hover::before {
+      opacity: 1;
+      animation: rotate 4s linear infinite;
+    }
+
+    @keyframes rotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .service-card:hover {
+      transform: translateY(-15px) scale(1.05);
+      border-color: #4caf50;
+      box-shadow: 0 20px 60px rgba(76, 175, 80, 0.4);
+    }
+
+    .service-icon {
+      font-size: 4em;
+      margin-bottom: 20px;
+      display: block;
+      position: relative;
+      z-index: 1;
+      animation: bounce 2s ease-in-out infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .service-card:hover .service-icon {
+      animation: none;
+      transform: scale(1.2);
+      transition: transform 0.3s ease;
+    }
+
+    .service-title {
+      font-size: 1.8em;
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: #fff;
+      position: relative;
+      z-index: 1;
+    }
+
+    .service-subtitle {
+      font-size: 1em;
+      color: #a5d6a7;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Enhanced Popup Modal */
+    .popup {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(8px);
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .popup-content {
+      background: linear-gradient(135deg, #1a2f2f 0%, #0d3d4d 100%);
+      margin: 5% auto;
+      padding: 40px 30px;
+      border-radius: 30px;
+      width: 90%;
+      max-width: 500px;
+      max-height: 85vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      border: 2px solid rgba(76, 175, 80, 0.3);
+      animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .popup-content::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .popup-content::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+    }
+
+    .popup-content::-webkit-scrollbar-thumb {
+      background: #4caf50;
+      border-radius: 10px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 20px;
+      right: 25px;
+      font-size: 32px;
+      cursor: pointer;
+      color: #a5d6a7;
+      transition: all 0.3s ease;
+      z-index: 1001;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .close-btn:hover {
+      color: #fff;
+      background: rgba(244, 67, 54, 0.8);
+      transform: rotate(90deg);
+    }
+
+    #popupTitle {
+      font-size: 2em;
+      margin-bottom: 30px;
+      text-align: center;
+      color: #fff;
+      padding-right: 40px;
+    }
+
+    .sub-option {
+      background: linear-gradient(135deg, rgba(76, 175, 80, 0.2) 0%, rgba(0, 150, 136, 0.2) 100%);
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(76, 175, 80, 0.4);
+      color: white;
+      padding: 20px 25px;
+      margin: 15px 0;
+      border-radius: 15px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: 100%;
+      font-size: 1.1em;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .sub-option::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(76, 175, 80, 0.3), transparent);
+      transition: left 0.5s;
+    }
+
+    .sub-option:hover::before {
+      left: 100%;
+    }
+
+    .sub-option:hover {
+      background: linear-gradient(135deg, rgba(76, 175, 80, 0.4) 0%, rgba(0, 150, 136, 0.4) 100%);
+      border-color: #4caf50;
+      transform: translateX(5px);
+      box-shadow: 0 5px 20px rgba(76, 175, 80, 0.3);
+    }
+
+    .sub-option-text {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 5px;
+    }
+
+    .sub-option-title {
+      font-weight: 600;
+      font-size: 1.1em;
+    }
+
+    .sub-option-desc {
+      font-size: 0.85em;
+      color: #a5d6a7;
+    }
+
+    .plus-icon {
+      font-size: 24px;
+      font-weight: bold;
+      transition: transform 0.3s ease;
+      background: rgba(76, 175, 80, 0.3);
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+    }
+
+    .details {
+      display: none;
+      margin-top: 15px;
+      padding: 20px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 12px;
+      border-left: 4px solid #4caf50;
+      color: #c8e6c9;
+      font-size: 0.95em;
+      line-height: 1.8;
+      animation: slideDown 0.3s ease;
+    }
+
+    @keyframes slideDown {
+      from { opacity: 0; max-height: 0; }
+      to { opacity: 1; max-height: 500px; }
+    }
+
+    .details strong {
+      color: #4caf50;
+      font-weight: 600;
+    }
+
+    .details .option {
+      margin: 10px 0;
+    }
+
+    .details input[type="radio"] {
+      margin-right: 8px;
+      cursor: pointer;
+    }
+
+    .details label {
+      cursor: pointer;
+      margin-bottom: 5px;
+      display: inline-block;
+    }
+
+    .details ul {
+      margin-left: 25px;
+      margin-top: 5px;
+    }
+
+    hr {
+      border: none;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(76, 175, 80, 0.5), transparent);
+      margin: 25px 0;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 5px 12px;
+      background: rgba(76, 175, 80, 0.3);
+      border-radius: 20px;
+      font-size: 0.75em;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #4caf50;
+      border: 1px solid rgba(76, 175, 80, 0.5);
+    }
+
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 2.5em;
+      }
+
+      header h3 {
+        font-size: 1em;
+        letter-spacing: 2px;
+      }
+
+      .stats-bar {
+        gap: 20px;
+      }
+
+      .stat-item {
+        padding: 12px 20px;
+      }
+
+      h2 {
+        font-size: 2em;
+      }
+
+      .service-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .popup-content {
+        width: 95%;
+        padding: 30px 20px;
+        margin: 10% auto;
+      }
+
+      #popupTitle {
+        font-size: 1.6em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="particles" id="particles"></div>
+  
+  <div class="content-wrapper">
+    <header>
+      <h1>Tech Bench</h1>
+      <h3>Sustainable • Convenient • Smart</h3>
+      
+      <div class="stats-bar">
+        <div class="stat-item">
+          <span class="stat-number">100%</span>
+          <span class="stat-label">Solar Powered</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">24/7</span>
+          <span class="stat-label">Available</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">5+</span>
+          <span class="stat-label">Devices</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="section">
+      <h2>About This Bench</h2>
+      <p class="description">
+        Welcome to our eco-friendly Tech Bench! Powered by integrated solar panels, it provides Wi-Fi and USB charging ports. Choose your service below—basic access is free, but premium unlocks unlimited high-speed options. Turning ordinary benches into intelligent public infrastructure for a smarter, greener and more connected world.
+      </p>
+    </div>
+
+    <div class="section">
+      <h2>Select Your Service</h2>
+      <div class="service-grid">
+        <div class="service-card" id="chargingBtn">
+          <span class="service-icon">🔋</span>
+          <div class="service-title">Charging</div>
+          <div class="service-subtitle">Power up your devices</div>
+        </div>
+        
+        <div class="service-card" id="wifiBtn">
+          <span class="service-icon">📶</span>
+          <div class="service-title">Wi-Fi</div>
+          <div class="service-subtitle">Stay connected online</div>
+        </div>
+        
+        <div class="service-card" id="bothBtn">
+          <span class="service-icon">⚡</span>
+          <div class="service-title">Both</div>
+          <div class="service-subtitle">Complete solution</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+  <div id="popup" class="popup">
+    <div class="popup-content">
+      <span class="close-btn" id="closePopup">&times;</span>
+      <h3 id="popupTitle"></h3>
+      <div id="popupOptions"></div>
+    </div>
+  </div>
+
+  <script>
+    
+    const particlesContainer = document.getElementById('particles');
+    for (let i = 0; i < 20; i++) {
+      const particle = document.createElement('div');
+      particle.className = 'particle';
+      particle.style.left = Math.random() * 100 + '%';
+      particle.style.animationDelay = Math.random() * 15 + 's';
+      particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+      particlesContainer.appendChild(particle);
+    }
+
+    const popup = document.getElementById("popup");
+    const popupTitle = document.getElementById("popupTitle");
+    const popupOptions = document.getElementById("popupOptions");
+    const closePopup = document.getElementById("closePopup");
+
+    function toggleDetails(button) {
+      const details = button.nextElementSibling;
+      const plusIcon = button.querySelector('.plus-icon');
+      if (details.style.display === 'block') {
+        details.style.display = 'none';
+        plusIcon.textContent = '+';
+        plusIcon.style.transform = 'rotate(0deg)';
+      } else {
+        details.style.display = 'block';
+        plusIcon.textContent = '−';
+        plusIcon.style.transform = 'rotate(180deg)';
+      }
+    }
+
+    document.getElementById("chargingBtn").addEventListener("click", function() {
+      popupTitle.textContent = "⚡ Charging Options";
+      popupOptions.innerHTML = `
+        <button class="sub-option" onclick="toggleDetails(this)">
+          <div class="sub-option-text">
+            <span class="sub-option-title">Freemium <span class="badge">Free</span></span>
+            <span class="sub-option-desc"></span>
+          </div>
+          <span class="plus-icon">+</span>
+        </button>
+        <div class="details">
+          <form>
+            <div class="option">
+              <input type="radio" id="freemium-wired" name="freemium-charging" value="wired">
+              <label for="freemium-wired"><strong><i>WIRED</i></strong></label>
+              <ul>
+                <li><strong>Power Output:</strong> 5V/2A = 10 Watts</li>
+              </ul>
+            </div>
+            
+            <div class="option"> 
+              <input type="radio" id="freemium-wireless" name="freemium-charging" value="wireless">
+              <label for="freemium-wireless"><strong><i>WIRELESS</i></strong></label>
+              <ul>
+                <li><strong>Power Output:</strong> 5 Watt</li>
+              </ul>
+            </div>
+          </form>
+        </div>
+        
+        <button class="sub-option" onclick="toggleDetails(this)">
+          <div class="sub-option-text">
+            <span class="sub-option-title">Premium <span class="badge">Pro</span></span>
+            <span class="sub-option-desc"></span>
+          </div>
+          <span class="plus-icon">+</span>
+        </button>
+        <div class="details">
+          <form>
+            <div class="option">
+              <input type="radio" id="premium-wired" name="premium-charging" value="wired">
+              <label for="premium-wired"><strong><i>WIRED</i></strong></label>
+              <ul>
+                <li><strong>Power Output:</strong> 9V/2A = 18 Watts (almost 2x faster charging)</li>
+                <li><strong>Charges:</strong> ₹15 for 30 min</li>
+              </ul>
+            </div>
+            
+            <div class="option"> 
+              <input type="radio" id="premium-wireless" name="premium-charging" value="wireless">
+              <label for="premium-wireless"><strong><i>WIRELESS</i></strong></label>
+              <ul>
+                <li><strong>Power Output:</strong> 10-15 Watt (2-3x faster charging)</li>
+                <li><strong>Charges:</strong> ₹15 for 30 min</li>
+              </ul>
+            </div>
+          </form>
+        </div>
+        
+        <a href="http://127.0.0.1:5500/blank.html"> Continue! </a>
+        
+      `;
+      popup.style.display = "block";
+    });
+
+    document.getElementById("wifiBtn").addEventListener("click", function() {
+      popupTitle.textContent = "📶 Wi-Fi Options";
+      popupOptions.innerHTML = `
+        <button class="sub-option" onclick="toggleDetails(this)">
+          <div class="sub-option-text">
+            <span class="sub-option-title">Freemium <span class="badge">Free</span></span>
+            <span class="sub-option-desc"></span>
+          </div>
+          <span class="plus-icon">+</span>
+        </button>
+        <div class="details">
+
+          <strong>🚀 Speed:</strong> 2-5 Mbps per user<br>
+          <strong>📡 Range:</strong> 10-15 meters around the bench<br>
+          <strong>📶 Network Type:</strong> 2.4 GHz band (longer range, stable connection)<br>
+        </div>
+        
+        <button class="sub-option" onclick="toggleDetails(this)">
+          <div class="sub-option-text">
+            <span class="sub-option-title">Premium <span class="badge">Pro</span></span>
+            <span class="sub-option-desc"></span>
+          </div>
+          <span class="plus-icon">+</span>
+        </button>
+        <div class="details">
+          <strong>🚀 Speed:</strong> 15-30 Mbps per user<br>
+          <strong>📡 Range:</strong> Up to 25 meters<br>
+          <strong>📶 Network Type:</strong> 5 GHz band (higher speed, lower range)<br>
+          <strong>💵 Charges: </strong>
+          <ul>
+            <li>₹15 for 30 min</li>
+            <li>₹20 per Gb</li>
+          </ul>
+        </div>
+      `;
+      popup.style.display = "block";
+    });
+
+    document.getElementById("bothBtn").addEventListener("click", function() {
+      popupTitle.textContent = "⚡ Combined Plans";
+      popupOptions.innerHTML = `
+        <button class="sub-option" onclick="toggleDetails(this)">
+          <div class="sub-option-text">
+            <span class="sub-option-title">Freemium Combo <span class="badge">Free</span></span>
+            <span class="sub-option-desc"></span>
+          </div>
+          <span class="plus-icon">+</span>
+        </button>
+        <div class="details">
+          <h3>Charging</h3>
+          <strong>WIRED:</strong>
+          <ul>
+            <li><strong>Power Output:</strong> 5V/2A = 10 Watts</li>
+          </ul>
+          <strong>WIRELESS:</strong>
+          <ul>
+            <li><strong>Power Output:</strong> 5 Watt</li>
+          </ul>
+          <h3>Wi-Fi</h3> 
+          <strong>🚀 Speed:</strong> 2-5 Mbps per user<br>
+          <strong>📡 Range:</strong> 10-15 meters around the bench<br>
+        </div>
+        
+        <button class="sub-option" onclick="toggleDetails(this)">
+          <div class="sub-option-text">
+            <span class="sub-option-title">Premium Combo <span class="badge">Ultimate</span></span>
+            <span class="sub-option-desc"></span>
+          </div>
+          <span class="plus-icon">+</span>
+        </button>
+        <div class="details">
+          <h3>Charging</h3>
+          <strong>WIRED:</strong>
+          <ul>
+            <li><strong>Power Output:</strong> 9V/2A = 18 Watts (almost 2x faster charging)</li>
+          </ul>
+          <strong>WIRELESS:</strong>
+          <ul>
+            <li><strong>Power Output:</strong> 10-15 Watt (2-3x faster charging)</li>
+          </ul>
+          <h3>Wi-Fi</h3>
+          <strong>🚀 Speed:</strong> 15-30 Mbps per user<br>
+          <strong>📡 Range:</strong> Up to 25 meters<br>
+          <h4><i>Combined Charges: ₹25 for 30 min</i></h4>
+        </div>
+        
+        <button class="sub-option" onclick="toggleDetails(this)">
+          <div class="sub-option-text">
+            <span class="sub-option-title">Free Wi-Fi + Premium Charging</span>
+          </div>
+          <span class="plus-icon">+</span>
+        </button>
+        <div class="details">
+          <h3>Wi-Fi</h3>
+          <strong>🚀 Speed:</strong> 2-5 Mbps per user<br>
+          <strong>📡 Range:</strong> 10-15 meters around the bench<br>
+          <h3>Charging</h3>
+          <strong>WIRED:</strong>
+          <ul>
+            <li><strong>Power Output:</strong> 9V/2A = 18 Watts (almost 2x faster charging)</li>
+            <li><strong>Charges:</strong> ₹15 for 30 min</li>
+          </ul>
+          <strong>WIRELESS:</strong>
+          <ul>
+            <li><strong>Power Output:</strong> 10-15 Watt (2-3x faster charging)</li>
+            <li><strong>Charges:</strong> ₹15 for 30 min</li>
+          </ul>
+        </div>
+
+        <button class="sub-option" onclick="toggleDetails(this)">
+          <div class="sub-option-text">
+            <span class="sub-option-title">Free Charging + Premium Wi-Fi</span>
+          </div>
+          <span class="plus-icon">+</span>
+        </button>
+        <div class="details">
+          <h3>Charging</h3>
+          <strong>WIRED:</strong>
+          <ul>
+            <li><strong>Power Output:</strong> 5V/2A = 10 Watts</li>
+          </ul>
+          <strong>WIRELESS:</strong>
+          <ul>
+            <li><strong>Power Output:</strong> 5 Watt</li>
+          </ul>
+          <h3>Wi-Fi</h3>
+          <strong>🚀 Speed:</strong> 15-30 Mbps per user<br>
+          <strong>📡 Range:</strong> Up to 25 meters<br>
+          <strong>💵 Charges:</strong>
+          <ul>
+            <li>₹15 for 30 min</li>
+            <li>₹20 per GB</li>
+          </ul>
+        </div>
+      `;
+      popup.style.display = "block";
+    });
+
+    closePopup.addEventListener("click", function() {
+      popup.style.display = "none";
+    });
+
+    window.addEventListener("click", function(e) {
+      if (e.target == popup) {
+        popup.style.display = "none";
+      }
+    });
+  </script>
+</body>
+</html>
